@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rocketchat
+  namespace: kube-public
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        k8s-app: rocketchat
+  spec:
+    containers:
+    - name: rocketchat
+      image: rocketchat
+      imagePullPolicy: IfNotPresent
+    ports:
+    - name: rocketchat
+      containerPort: 3000
+    env:
+    - name: MONGO_URL
+      value: "mongodb://mongodb:27017/rocketchat"

@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongodb
+  namespace: kube-public
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        k8s-app: mongodb
+	spec:
+	  containers:
+	  - name: mongodb
+	    image: mongo
+	    imagePullPolicy: IfNotPresent
+	    ports:
+	    - name: mongodb
+        containerPort: 27017
+	  volumeMounts:
+	  - mountPath: /data/db
+	    name: mongopv
+	  volumeClaimTemplates:
+    - metadata:
+	      name: mongopv
+        annotations:
+          volume.beta.kubernetes.io/storage-class: "storageclass-default"
+      spec:
+        accessModes: [ "ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 100Gi            
